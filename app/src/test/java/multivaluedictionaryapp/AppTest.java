@@ -43,7 +43,7 @@ public class AppTest {
     String[] arguments = {"ADD", "key", "value"};
     App.handleAddCommand(dictMock, arguments);
     verify(dictMock).add("key", "value");
-    assertEquals("Added\n", sysOut.toString());
+    assertEquals("Added", sysOut.toString().trim());
   }
 
   @Test
@@ -53,7 +53,7 @@ public class AppTest {
     String[] arguments = {"ADD", "key"};
     App.handleAddCommand(dictMock, arguments);
     assertEquals(
-        "Error, missing or redundant parameter, please use 'ADD key value'.\n", sysOut.toString());
+        "Error, missing or redundant parameter, please use 'ADD key value'.", sysOut.toString().trim());
   }
 
   @Test
@@ -64,14 +64,14 @@ public class AppTest {
         .when(dictMock)
         .add("key", "value");
     handleAddCommand(dictMock, arguments);
-    assertEquals("Error, member already exists for key.\n", sysErr.toString());
+    assertEquals("Error, member already exists for key.", sysErr.toString().trim());
   }
 
   @Test
   void handleKeysCommandEmptyDictionary() {
     String[] arguments = {"KEYS"};
     App.handleKeysCommand(dict, arguments);
-    assertEquals("(empty set)\n", sysOut.toString());
+    assertEquals("(empty set)", sysOut.toString().trim());
   }
 
   @Test
@@ -85,8 +85,8 @@ public class AppTest {
     values.add("value2");
     when(dictMock.getMembers("key")).thenReturn(values);
     App.handleMembersExistCommand(dictMock, arguments);
-    String expectedOutput = "1) value2\n2) value1\n";
-    assertEquals(expectedOutput, sysOut.toString());
+    String expectedOutput = "1) value2\n2) value1";
+    assertEquals(expectedOutput, sysOut.toString().trim());
   }
 
   @Test
@@ -98,8 +98,8 @@ public class AppTest {
     keys.add("key2");
     when(dictMock.getKeys()).thenReturn(keys);
     App.handleKeysCommand(dictMock, arguments);
-    String expectedOutput = "1) key1\n2) key2\n";
-    assertEquals(expectedOutput, sysOut.toString());
+    String expectedOutput = "1) key1\n2) key2";
+    assertEquals(expectedOutput, sysOut.toString().trim());
   }
 
   @Test
@@ -107,7 +107,7 @@ public class AppTest {
     MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
     String[] arguments = {"KEYS", "extraParam"};
     App.handleKeysCommand(dictMock, arguments);
-    assertEquals("Error, missing or redundant parameter, please use 'KEYS'.\n", sysOut.toString());
+    assertEquals("Error, missing or redundant parameter, please use 'KEYS'.", sysOut.toString().trim());
   }
 
   @Test
@@ -128,7 +128,7 @@ public class AppTest {
     String[] arguments = {"MEMBERS", "key"};
     when(dictMock.getMembers("key")).thenReturn(Collections.emptySet());
     App.handleMembersExistCommand(dictMock, arguments);
-    assertEquals(App.EMPTY_SET_MESSAGE + "\n", sysOut.toString());
+    assertEquals(App.EMPTY_SET_MESSAGE, sysOut.toString().trim());
   }
 
   @Test
@@ -137,7 +137,7 @@ public class AppTest {
     String[] argumentsWithoutKey = {"MEMBERS"};
     App.handleMembersExistCommand(dictMock, argumentsWithoutKey);
     assertEquals(
-        "Error, missing or redundant parameter, please use 'MEMBERS key'.\n", sysOut.toString());
+        "Error, missing or redundant parameter, please use 'MEMBERS key'.", sysOut.toString().trim());
   }
 
   @Test
@@ -146,7 +146,7 @@ public class AppTest {
     String[] arguments = new String[] {"argument"};
     App.handleClearCommand(dictMock, arguments);
     verify(dictMock, times(1)).clearMap();
-    assertEquals("Cleared\n", sysOut.toString());
+    assertEquals("Cleared", sysOut.toString().trim());
   }
 
   @Test
@@ -154,7 +154,7 @@ public class AppTest {
     MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
     String[] argumentsWithoutKey = {"CLEAR", "Key1"};
     App.handleClearCommand(dictMock, argumentsWithoutKey);
-    assertEquals("Error, missing or redundant parameter, please use 'CLEAR'.\n", sysOut.toString());
+    assertEquals("Error, missing or redundant parameter, please use 'CLEAR'.", sysOut.toString().trim());
   }
 
   @Test
@@ -163,7 +163,7 @@ public class AppTest {
     when(dictMock.getMap()).thenReturn(Collections.emptyMap());
     String[] arguments = new String[] {"ITEMS"};
     App.handleItemsCommand(dictMock, arguments);
-    assertEquals(App.EMPTY_SET_MESSAGE + "\n", sysOut.toString());
+    assertEquals(App.EMPTY_SET_MESSAGE, sysOut.toString().trim());
   }
 
   @Test
@@ -177,7 +177,7 @@ public class AppTest {
     when(dictMock.getMap()).thenReturn(map);
     String[] arguments = new String[] {"ITEMS"};
     App.handleItemsCommand(dictMock, arguments);
-    assertEquals("1) key1: value1\n2) key1: value2\n", sysOut.toString());
+    assertEquals("1) key1: value1\n2) key1: value2", sysOut.toString().trim());
   }
 
   @Test
@@ -185,7 +185,7 @@ public class AppTest {
     MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
     String[] argumentsWithoutKey = {};
     App.handleItemsCommand(dictMock, argumentsWithoutKey);
-    assertEquals("Error, missing or redundant parameter, please use 'ITEMS'.\n", sysOut.toString());
+    assertEquals("Error, missing or redundant parameter, please use 'ITEMS'.", sysOut.toString().trim());
   }
 
   @Test
@@ -194,7 +194,7 @@ public class AppTest {
     when(dictMock.getMap()).thenReturn(Collections.emptyMap());
     String[] arguments = new String[] {"ALLMEMBERS"};
     App.handleAllMembersCommand(dictMock, arguments);
-    assertEquals(App.EMPTY_SET_MESSAGE + "\n", sysOut.toString());
+    assertEquals(App.EMPTY_SET_MESSAGE, sysOut.toString().trim());
   }
 
   @Test
@@ -208,7 +208,7 @@ public class AppTest {
     doNothing().when(dictMock).removeMemberFromKey("key1", "value1");
     String[] arguments = new String[] {"REMOVE", "key1", "value1"};
     App.handleRemoveCommand(dictMock, arguments);
-    assertEquals("Removed\n", sysOut.toString());
+    assertEquals("Removed", sysOut.toString().trim());
   }
 
   @Test
@@ -221,7 +221,7 @@ public class AppTest {
     when(dictMock.getAllMembers()).thenReturn(setList);
     String[] arguments = new String[] {"ALLMEMBERS"};
     App.handleAllMembersCommand(dictMock, arguments);
-    assertEquals("1) value3\n2) value3\n", sysOut.toString());
+    assertEquals("1) value3\n2) value3", sysOut.toString().trim());
   }
 
   @Test
@@ -230,7 +230,7 @@ public class AppTest {
     String[] arguments = {"ALLMEMBERS", "value1"};
     App.handleAllMembersCommand(dictMock, arguments);
     assertEquals(
-        "Error, missing or redundant parameter, please use 'ALLMEMBERS'.\n", sysOut.toString());
+        "Error, missing or redundant parameter, please use 'ALLMEMBERS'.", sysOut.toString().trim());
   }
 
   @Test
@@ -239,8 +239,8 @@ public class AppTest {
     String[] arguments = {"REMOVE", "key1", "value1", "key2", "value2"};
     App.handleRemoveCommand(dictMock, arguments);
     assertEquals(
-        "Error, missing or redundant parameter, please use 'REMOVE key value'.\n",
-        sysOut.toString());
+        "Error, missing or redundant parameter, please use 'REMOVE key value'.",
+        sysOut.toString().trim());
   }
 
   @Test
@@ -256,7 +256,7 @@ public class AppTest {
     App.handleRemoveCommand(dictMock, arguments);
     verify(dictMock)
         .removeMemberFromKey(ArgumentMatchers.eq("key1"), ArgumentMatchers.eq("value1"));
-    assertEquals("Removed\n", sysOut.toString());
+    assertEquals("Removed", sysOut.toString().trim());
   }
 
   @Test
@@ -269,8 +269,8 @@ public class AppTest {
         .removeMemberFromKey("key", "value");
     App.handleRemoveCommand(dictMock, arguments);
     assertEquals(
-        String.format(MultiStringsDictionary.NOT_EXIST_ERROR_MESSAGE_TEMPLATE + "\n", "key"),
-        sysErr.toString());
+        String.format(MultiStringsDictionary.NOT_EXIST_ERROR_MESSAGE_TEMPLATE, "key"),
+        sysErr.toString().trim());
   }
 
   @Test
@@ -280,8 +280,8 @@ public class AppTest {
     String[] arguments = {"MEMBERS"};
     App.handleMemberExistsCommand(dictMock, arguments);
     assertEquals(
-        "Error, missing or redundant parameter, please use 'MEMBEREXISTS key value'.\n",
-        sysOut.toString());
+        "Error, missing or redundant parameter, please use 'MEMBEREXISTS key value'.",
+        sysOut.toString().trim());
   }
 
   @Test
@@ -294,7 +294,7 @@ public class AppTest {
     when(dictMock.isMemberExistsWithinAKey("key1", "value1"))
         .thenThrow(new KeyNotFoundException("Key not found"));
     App.handleMemberExistsCommand(dictMock, arguments);
-    assertEquals("Key not found\n", sysErr.toString());
+    assertEquals("Key not found", sysErr.toString().trim());
   }
 
   @Test
@@ -303,7 +303,7 @@ public class AppTest {
     String[] arguments = {"KEYEXISTS", "key1"};
     when(dictMock.isKeyExists("key1")).thenReturn(true);
     App.handleKeyExistsCommand(dictMock, arguments);
-    assertEquals("true\n", sysOut.toString());
+    assertEquals("true", sysOut.toString().trim());
   }
 
   @Test
@@ -312,7 +312,7 @@ public class AppTest {
     String[] arguments = {"KEYEXISTS key1 key2"};
     App.handleKeyExistsCommand(dictMock, arguments);
     assertEquals(
-        "Error, missing or redundant parameter, please use 'KEYEXISTS key'.\n", sysOut.toString());
+        "Error, missing or redundant parameter, please use 'KEYEXISTS key'.", sysOut.toString().trim());
   }
 
   @Test
@@ -320,7 +320,7 @@ public class AppTest {
     String[] arguments = {"REMOVEALL"};
     App.handleRemoveAllCommand(dict, arguments);
     assertEquals(
-        "Error, missing or redundant parameter, please use 'REMOVEALL key'.\n", sysOut.toString());
+        "Error, missing or redundant parameter, please use 'REMOVEALL key'.", sysOut.toString().trim());
   }
 
   @Test
@@ -329,7 +329,7 @@ public class AppTest {
     String[] arguments = {"REMOVEALL", "key1"};
     App.handleRemoveAllCommand(dictMock, arguments);
     verify(dictMock, times(1)).removeAllMemberOfKey("key1");
-    assertEquals("Removed\n", sysOut.toString());
+    assertEquals("Removed", sysOut.toString().trim());
   }
 
   @Test
@@ -341,6 +341,6 @@ public class AppTest {
         .when(dictMock)
         .removeAllMemberOfKey("key1");
     App.handleRemoveAllCommand(dictMock, arguments);
-    assertEquals("Error, key does not exist.\n", sysErr.toString());
+    assertEquals("Error, key does not exist.", sysErr.toString().trim());
   }
 }
