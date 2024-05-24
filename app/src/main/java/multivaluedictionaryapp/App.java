@@ -18,7 +18,6 @@ public class App {
     MultiStringsDictionary dict = new MultiStringsDictionary();
 
     while (true) {
-      // System.out.print("this is " + scanner.nextLine().toString());
       String input = scanner.nextLine().trim();
       if (input.equalsIgnoreCase("EXIT")) {
         System.out.println("Exiting the application.");
@@ -93,7 +92,6 @@ public class App {
     if (arguments.length == 2) {
       String key = arguments[1];
       try {
-        // if dict is originally empty; return empty set and key is not exist
         Set<String> values = dict.getMembers(key);
         if (values.isEmpty()) {
           System.out.println(EMPTY_SET_MESSAGE);
