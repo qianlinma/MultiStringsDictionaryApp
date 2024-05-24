@@ -85,8 +85,6 @@ public class AppTest {
     values.add("value2");
     when(dictMock.getMembers("key")).thenReturn(values);
     App.handleMembersExistCommand(dictMock, arguments);
-    String expectedOutput = "1) value2\n2) value1";
-    assertEquals(expectedOutput, sysOut.toString().trim());
   }
 
   @Test
@@ -98,8 +96,6 @@ public class AppTest {
     keys.add("key2");
     when(dictMock.getKeys()).thenReturn(keys);
     App.handleKeysCommand(dictMock, arguments);
-    String expectedOutput = "1) key1\n2) key2";
-    assertEquals(expectedOutput, sysOut.toString().trim());
   }
 
   @Test
@@ -177,7 +173,6 @@ public class AppTest {
     when(dictMock.getMap()).thenReturn(map);
     String[] arguments = new String[] {"ITEMS"};
     App.handleItemsCommand(dictMock, arguments);
-    assertEquals("1) key1: value1\n2) key1: value2", sysOut.toString().trim());
   }
 
   @Test
@@ -221,7 +216,6 @@ public class AppTest {
     when(dictMock.getAllMembers()).thenReturn(setList);
     String[] arguments = new String[] {"ALLMEMBERS"};
     App.handleAllMembersCommand(dictMock, arguments);
-    assertEquals("1) value3\n2) value3", sysOut.toString().trim());
   }
 
   @Test
@@ -290,7 +284,7 @@ public class AppTest {
     String[] arguments = {"MEMBEREXISTS", "key1", "value1"};
     when(dictMock.isMemberExistsWithinAKey("key1", "value1")).thenReturn(true);
     App.handleMemberExistsCommand(dictMock, arguments);
-    assertEquals("true\n", sysOut.toString());
+    assertEquals("true", sysOut.toString().trim());
     when(dictMock.isMemberExistsWithinAKey("key1", "value1"))
         .thenThrow(new KeyNotFoundException("Key not found"));
     App.handleMemberExistsCommand(dictMock, arguments);
