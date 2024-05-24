@@ -28,18 +28,18 @@ public class AppTest {
 
   private final ByteArrayOutputStream sysOut = new ByteArrayOutputStream();
   private final ByteArrayOutputStream sysErr = new ByteArrayOutputStream();
-  private MultiStringsDictionary dict;
+  private MultiValueDictionary dict;
 
   @BeforeEach
   void setUp() {
     System.setOut(new PrintStream(sysOut));
     System.setErr(new PrintStream(sysErr));
-    dict = new MultiStringsDictionary();
+    dict = new MultiValueDictionary();
   }
 
   @Test
   void testHandleAddCommandWithValidArguments() throws MemberAlreadyExistsException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"ADD", "key", "value"};
     App.handleAddCommand(dictMock, arguments);
     verify(dictMock).add("key", "value");
@@ -49,7 +49,7 @@ public class AppTest {
   @Test
   void testHandleAddCommandWithMissingParameter() {
 
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"ADD", "key"};
     App.handleAddCommand(dictMock, arguments);
     assertEquals(
@@ -58,7 +58,7 @@ public class AppTest {
 
   @Test
   void testHandleAddCommandMemberAlreadyExistsException() throws MemberAlreadyExistsException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"ADD", "key", "value"};
     doThrow(new MemberAlreadyExistsException("Error, member already exists for key."))
         .when(dictMock)
@@ -77,7 +77,7 @@ public class AppTest {
   @Test
   void handleKeysCommandNonEmptyDictionary()
       throws MemberAlreadyExistsException, KeyNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"MEMBERS", "key"};
 
     Set<String> values = new HashSet<>();
@@ -89,7 +89,7 @@ public class AppTest {
 
   @Test
   void testHandleKeysCommandWithKeys() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"KEYS"};
     Set<String> keys = new HashSet<>();
     keys.add("key1");
@@ -100,7 +100,7 @@ public class AppTest {
 
   @Test
   void handleKeysCommandMoreParameters() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"KEYS", "extraParam"};
     App.handleKeysCommand(dictMock, arguments);
     assertEquals("Error, missing or redundant parameter, please use 'KEYS'.", sysOut.toString().trim());
@@ -108,7 +108,7 @@ public class AppTest {
 
   @Test
   void testHandleMembersExistCommandWithKeyNotFoundException() throws KeyNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"MEMBERS", "nonExistingKey"};
 
     doThrow(new KeyNotFoundException("Error, key does not exist."))
@@ -120,7 +120,7 @@ public class AppTest {
 
   @Test
   void testHandleMembersExistCommandWithEmptySet() throws KeyNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"MEMBERS", "key"};
     when(dictMock.getMembers("key")).thenReturn(Collections.emptySet());
     App.handleMembersExistCommand(dictMock, arguments);
@@ -129,7 +129,7 @@ public class AppTest {
 
   @Test
   public void testHandleMembersExistCommandNoKey() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] argumentsWithoutKey = {"MEMBERS"};
     App.handleMembersExistCommand(dictMock, argumentsWithoutKey);
     assertEquals(
@@ -138,7 +138,7 @@ public class AppTest {
 
   @Test
   public void testHandleClearCommandWithOneArgument() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = new String[] {"argument"};
     App.handleClearCommand(dictMock, arguments);
     verify(dictMock, times(1)).clearMap();
@@ -147,7 +147,7 @@ public class AppTest {
 
   @Test
   public void testHandleClearCommandWithMultipleArguments() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] argumentsWithoutKey = {"CLEAR", "Key1"};
     App.handleClearCommand(dictMock, argumentsWithoutKey);
     assertEquals("Error, missing or redundant parameter, please use 'CLEAR'.", sysOut.toString().trim());
@@ -155,7 +155,7 @@ public class AppTest {
 
   @Test
   public void testHandleItemsCommandWithOneArgumentAndEmptyMap() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     when(dictMock.getMap()).thenReturn(Collections.emptyMap());
     String[] arguments = new String[] {"ITEMS"};
     App.handleItemsCommand(dictMock, arguments);
@@ -164,7 +164,7 @@ public class AppTest {
 
   @Test
   public void testHandleItemsCommandWithOneArgumentAndNonEmptyMap() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
 
     List<String> list = new ArrayList<>(Arrays.asList("key1: value1", "key1: value2"));
     when(dictMock.getItems()).thenReturn(list);
@@ -177,7 +177,7 @@ public class AppTest {
 
   @Test
   public void testHandleItemsCommandWithMultipleArguments() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] argumentsWithoutKey = {};
     App.handleItemsCommand(dictMock, argumentsWithoutKey);
     assertEquals("Error, missing or redundant parameter, please use 'ITEMS'.", sysOut.toString().trim());
@@ -185,7 +185,7 @@ public class AppTest {
 
   @Test
   public void testHandleAllMembersCommandWithOneArgumentAndEmptyMap() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     when(dictMock.getMap()).thenReturn(Collections.emptyMap());
     String[] arguments = new String[] {"ALLMEMBERS"};
     App.handleAllMembersCommand(dictMock, arguments);
@@ -195,7 +195,7 @@ public class AppTest {
   @Test
   public void testHandleRemoveCommandWithExistingKeyValuePairAndNonEmptyMap()
       throws KeyNotFoundException, MembersNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
 
     Map<String, Set<String>> map = new HashMap();
     map.put("key1", Set.of("value2"));
@@ -209,7 +209,7 @@ public class AppTest {
   @Test
   public void testHandleAllMembersCommandAndNonEmptyMap()
       throws KeyNotFoundException, MembersNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     List<Set<String>> setList = new ArrayList<>();
     setList.add(Set.of("value3"));
     setList.add(Set.of("value3"));
@@ -220,7 +220,7 @@ public class AppTest {
 
   @Test
   public void testHandleAllMembersCommandWithMultipleArguments() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"ALLMEMBERS", "value1"};
     App.handleAllMembersCommand(dictMock, arguments);
     assertEquals(
@@ -229,7 +229,7 @@ public class AppTest {
 
   @Test
   public void testHandleRemoveCommandCommandWithMultipleArguments() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"REMOVE", "key1", "value1", "key2", "value2"};
     App.handleRemoveCommand(dictMock, arguments);
     assertEquals(
@@ -240,7 +240,7 @@ public class AppTest {
   @Test
   public void testHandleRemoveCommandWithOneArgumentAndNonEmptyMap()
       throws KeyNotFoundException, MembersNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     Map<String, Set<String>> map = new HashMap<>();
     map.put("key1", Set.of("value2"));
     map.put("key2", Set.of("value3", "value4"));
@@ -256,21 +256,21 @@ public class AppTest {
   @Test
   public void testHandleRemoveCommandKeyNotFoundException()
       throws KeyNotFoundException, MembersNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = new String[] {"REMOVE", "key", "value"};
     doThrow(new KeyNotFoundException("Error, key does not exist."))
         .when(dictMock)
         .removeMemberFromKey("key", "value");
     App.handleRemoveCommand(dictMock, arguments);
     assertEquals(
-        String.format(MultiStringsDictionary.NOT_EXIST_ERROR_MESSAGE_TEMPLATE, "key"),
+        String.format(MultiValueDictionary.NOT_EXIST_ERROR_MESSAGE_TEMPLATE, "key"),
         sysErr.toString().trim());
   }
 
   @Test
   public void testhandleMemberExistsCommandWithMultipleArguments()
       throws KeyNotFoundException, KeyNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"MEMBERS"};
     App.handleMemberExistsCommand(dictMock, arguments);
     assertEquals(
@@ -280,7 +280,7 @@ public class AppTest {
 
   @Test
   public void testHandleMemberExistsCommand() throws KeyNotFoundException, KeyNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"MEMBEREXISTS", "key1", "value1"};
     when(dictMock.isMemberExistsWithinAKey("key1", "value1")).thenReturn(true);
     App.handleMemberExistsCommand(dictMock, arguments);
@@ -293,7 +293,7 @@ public class AppTest {
 
   @Test
   public void testHandleKeyExistsCommandWithEmptySet() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"KEYEXISTS", "key1"};
     when(dictMock.isKeyExists("key1")).thenReturn(true);
     App.handleKeyExistsCommand(dictMock, arguments);
@@ -302,7 +302,7 @@ public class AppTest {
 
   @Test
   public void testHandleKeyExistsCommand() {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"KEYEXISTS key1 key2"};
     App.handleKeyExistsCommand(dictMock, arguments);
     assertEquals(
@@ -319,7 +319,7 @@ public class AppTest {
 
   @Test
   public void testHandleRemoveAllCommandSuccess() throws KeyNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"REMOVEALL", "key1"};
     App.handleRemoveAllCommand(dictMock, arguments);
     verify(dictMock, times(1)).removeAllMemberOfKey("key1");
@@ -328,7 +328,7 @@ public class AppTest {
 
   @Test
   public void testHandleRemoveAllCommandWithKeyNotExisting() throws KeyNotFoundException {
-    MultiStringsDictionary dictMock = mock(MultiStringsDictionary.class);
+    MultiValueDictionary dictMock = mock(MultiValueDictionary.class);
     String[] arguments = {"REMOVEALL", "key1"};
     App.handleRemoveAllCommand(dictMock, arguments);
     doThrow(new KeyNotFoundException("Error, key does not exist."))

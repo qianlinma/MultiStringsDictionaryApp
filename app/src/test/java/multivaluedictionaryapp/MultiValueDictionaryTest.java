@@ -12,48 +12,48 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class MultiStringsDictionaryTest {
+public class MultiValueDictionaryTest {
 
-  private MultiStringsDictionary multiStringsDictionary;
+  private MultiValueDictionary multiValueDictionary;
 
   @BeforeEach
   public void setUp() {
-    multiStringsDictionary = new MultiStringsDictionary();
+    multiValueDictionary = new MultiValueDictionary();
   }
 
   @Test
   void testAddNewKeyAndValue() {
     try {
-      multiStringsDictionary.add("key1", "value1");
+      multiValueDictionary.add("key1", "value1");
     } catch (MemberAlreadyExistsException e) {
       assertEquals("Error, member already exists for key.", e.getMessage());
     }
-    assertTrue(multiStringsDictionary.getMap().containsKey("key1"));
-    assertTrue(multiStringsDictionary.getMap().get("key1").contains("value1"));
+    assertTrue(multiValueDictionary.getMap().containsKey("key1"));
+    assertTrue(multiValueDictionary.getMap().get("key1").contains("value1"));
   }
 
   @Test
   void testAddExistingKeyAndValue() {
     try {
-      multiStringsDictionary.add("key2", "value2");
-      multiStringsDictionary.add("key2", "value2");
+      multiValueDictionary.add("key2", "value2");
+      multiValueDictionary.add("key2", "value2");
     } catch (MemberAlreadyExistsException e) {
       assertEquals("Error, member already exists for key.", e.getMessage());
-      assertTrue(multiStringsDictionary.getMap().containsKey("key2"));
-      assertTrue(multiStringsDictionary.getMap().get("key2").contains("value2"));
-      assertTrue(multiStringsDictionary.getMap().size() == 1);
+      assertTrue(multiValueDictionary.getMap().containsKey("key2"));
+      assertTrue(multiValueDictionary.getMap().get("key2").contains("value2"));
+      assertTrue(multiValueDictionary.getMap().size() == 1);
     }
   }
 
   @Test
   void testGetKeys() throws MemberAlreadyExistsException {
-    assertTrue(multiStringsDictionary.getKeys().isEmpty());
-    multiStringsDictionary.add("key1", "value1");
-    multiStringsDictionary.add("key2", "value1");
-    assertTrue(multiStringsDictionary.getKeys().size() == 2);
-    assertTrue(multiStringsDictionary.getKeys().contains("key1"));
-    assertTrue(multiStringsDictionary.getKeys().contains("key2"));
-    assertFalse(multiStringsDictionary.getKeys().contains("key3"));
+    assertTrue(multiValueDictionary.getKeys().isEmpty());
+    multiValueDictionary.add("key1", "value1");
+    multiValueDictionary.add("key2", "value1");
+    assertTrue(multiValueDictionary.getKeys().size() == 2);
+    assertTrue(multiValueDictionary.getKeys().contains("key1"));
+    assertTrue(multiValueDictionary.getKeys().contains("key2"));
+    assertFalse(multiValueDictionary.getKeys().contains("key3"));
   }
 
   @Test
@@ -62,7 +62,7 @@ public class MultiStringsDictionaryTest {
         assertThrows(
             KeyNotFoundException.class,
             () -> {
-              multiStringsDictionary.getMembers("nonExistingKey");
+              multiValueDictionary.getMembers("nonExistingKey");
             });
     assertEquals("Error, key does not exist.", exception.getMessage());
   }
@@ -70,12 +70,12 @@ public class MultiStringsDictionaryTest {
   @Test
   public void testGetMembersMembersNotFoundException()
       throws MemberAlreadyExistsException, KeyNotFoundException {
-    multiStringsDictionary.add("existingKey", "existingMember");
+    multiValueDictionary.add("existingKey", "existingMember");
     KeyNotFoundException exception =
         assertThrows(
             KeyNotFoundException.class,
             () -> {
-              multiStringsDictionary.getMembers("nonExistingKey");
+              multiValueDictionary.getMembers("nonExistingKey");
             });
     assertEquals("Error, key does not exist.", exception.getMessage());
   }
@@ -83,9 +83,9 @@ public class MultiStringsDictionaryTest {
   @Test
   public void testGetMembers()
       throws MemberAlreadyExistsException, KeyNotFoundException, MembersNotFoundException {
-    multiStringsDictionary.add("key1", "value1");
-    multiStringsDictionary.add("key1", "value2");
-    Set<String> members = multiStringsDictionary.getMembers("key1");
+    multiValueDictionary.add("key1", "value1");
+    multiValueDictionary.add("key1", "value2");
+    Set<String> members = multiValueDictionary.getMembers("key1");
     assertTrue(members.contains("value1"));
     assertTrue(members.contains("value2"));
   }
@@ -96,7 +96,7 @@ public class MultiStringsDictionaryTest {
         assertThrows(
             KeyNotFoundException.class,
             () -> {
-              multiStringsDictionary.removeMemberFromKey("nonExistingKey", "value1");
+              multiValueDictionary.removeMemberFromKey("nonExistingKey", "value1");
             });
     assertEquals("Error, key does not exist.", exception.getMessage());
   }
@@ -104,12 +104,12 @@ public class MultiStringsDictionaryTest {
   @Test
   public void testRemoveMemberFromKeyMembersNotFoundException()
       throws MemberAlreadyExistsException {
-    multiStringsDictionary.add("existingKey", "value1");
+    multiValueDictionary.add("existingKey", "value1");
     MembersNotFoundException exception =
         assertThrows(
             MembersNotFoundException.class,
             () -> {
-              multiStringsDictionary.removeMemberFromKey("existingKey", "nonExistingValue");
+              multiValueDictionary.removeMemberFromKey("existingKey", "nonExistingValue");
             });
     assertEquals("Error, member does not exist.", exception.getMessage());
   }
@@ -117,20 +117,20 @@ public class MultiStringsDictionaryTest {
   @Test
   public void testRemoveMemberFromKeySuccess()
       throws MemberAlreadyExistsException, KeyNotFoundException, MembersNotFoundException {
-    multiStringsDictionary.add("existingKey", "value1");
-    multiStringsDictionary.add("existingKey", "value2");
-    multiStringsDictionary.removeMemberFromKey("existingKey", "value1");
-    assertTrue(multiStringsDictionary.getMap().containsKey("existingKey"));
-    assertFalse(multiStringsDictionary.getMap().get("existingKey").contains("value1"));
-    assertTrue(multiStringsDictionary.getMap().get("existingKey").contains("value2"));
+    multiValueDictionary.add("existingKey", "value1");
+    multiValueDictionary.add("existingKey", "value2");
+    multiValueDictionary.removeMemberFromKey("existingKey", "value1");
+    assertTrue(multiValueDictionary.getMap().containsKey("existingKey"));
+    assertFalse(multiValueDictionary.getMap().get("existingKey").contains("value1"));
+    assertTrue(multiValueDictionary.getMap().get("existingKey").contains("value2"));
   }
 
   @Test
   public void testRemoveMemberFromKeyRemoveLastMember()
       throws MemberAlreadyExistsException, KeyNotFoundException, MembersNotFoundException {
-    multiStringsDictionary.add("existingKey", "value1");
-    multiStringsDictionary.removeMemberFromKey("existingKey", "value1");
-    assertFalse(multiStringsDictionary.getMap().containsKey("existingKey"));
+    multiValueDictionary.add("existingKey", "value1");
+    multiValueDictionary.removeMemberFromKey("existingKey", "value1");
+    assertFalse(multiValueDictionary.getMap().containsKey("existingKey"));
   }
 
   @Test
@@ -139,7 +139,7 @@ public class MultiStringsDictionaryTest {
         assertThrows(
             KeyNotFoundException.class,
             () -> {
-              multiStringsDictionary.removeAllMemberOfKey("nonExistingKey");
+              multiValueDictionary.removeAllMemberOfKey("nonExistingKey");
             });
     assertEquals("Error, key does not exist.", exception.getMessage());
   }
@@ -147,40 +147,40 @@ public class MultiStringsDictionaryTest {
   @Test
   public void testRemoveAllMemberOfKeySuccess()
       throws MemberAlreadyExistsException, KeyNotFoundException {
-    multiStringsDictionary.add("existingKey", "value1");
-    multiStringsDictionary.add("existingKey", "value2");
-    multiStringsDictionary.removeAllMemberOfKey("existingKey");
-    assertFalse(multiStringsDictionary.getMap().containsKey("existingKey"));
+    multiValueDictionary.add("existingKey", "value1");
+    multiValueDictionary.add("existingKey", "value2");
+    multiValueDictionary.removeAllMemberOfKey("existingKey");
+    assertFalse(multiValueDictionary.getMap().containsKey("existingKey"));
   }
 
   @Test
   public void testIsKeyExistsWhenKeyExists() throws MemberAlreadyExistsException {
-    multiStringsDictionary.add("existingKey", "value1");
-    boolean result = multiStringsDictionary.isKeyExists("existingKey");
+    multiValueDictionary.add("existingKey", "value1");
+    boolean result = multiValueDictionary.isKeyExists("existingKey");
     assertTrue(result);
   }
 
   @Test
   public void testIsKeyExistsWhenKeyDoesNotExist() {
-    boolean result = multiStringsDictionary.isKeyExists("nonExistingKey");
+    boolean result = multiValueDictionary.isKeyExists("nonExistingKey");
     assertFalse(result);
   }
 
   @Test
   public void testIsMemberExistsWithinAKeyWhenMemberExists()
       throws MemberAlreadyExistsException, KeyNotFoundException {
-    multiStringsDictionary.add("existingKey", "existingValue");
+    multiValueDictionary.add("existingKey", "existingValue");
     boolean result =
-        multiStringsDictionary.isMemberExistsWithinAKey("existingKey", "existingValue");
+        multiValueDictionary.isMemberExistsWithinAKey("existingKey", "existingValue");
     assertTrue(result);
   }
 
   @Test
   public void testIsMemberExistsWithinAKeyWhenMemberDoesNotExist()
       throws MemberAlreadyExistsException, KeyNotFoundException {
-    multiStringsDictionary.add("existingKey", "existingValue");
+    multiValueDictionary.add("existingKey", "existingValue");
     boolean result =
-        multiStringsDictionary.isMemberExistsWithinAKey("existingKey", "nonExistingValue");
+        multiValueDictionary.isMemberExistsWithinAKey("existingKey", "nonExistingValue");
     assertFalse(result);
   }
 
@@ -190,23 +190,23 @@ public class MultiStringsDictionaryTest {
         assertThrows(
             KeyNotFoundException.class,
             () -> {
-              multiStringsDictionary.isMemberExistsWithinAKey("nonExistingKey", "anyValue");
+              multiValueDictionary.isMemberExistsWithinAKey("nonExistingKey", "anyValue");
             });
     assertEquals("ERROR, key does not exist.", exception.getMessage());
   }
 
   @Test
   public void testGetAllMembersWhenNoMembersExist() {
-    List<Set<String>> allMembers = multiStringsDictionary.getAllMembers();
+    List<Set<String>> allMembers = multiValueDictionary.getAllMembers();
     assertTrue(allMembers.isEmpty());
   }
 
   @Test
   public void testGetAllMembersWhenMembersExist() throws MemberAlreadyExistsException {
-    multiStringsDictionary.add("key1", "value1");
-    multiStringsDictionary.add("key1", "value2");
-    multiStringsDictionary.add("key2", "value3");
-    List<Set<String>> allMembers = multiStringsDictionary.getAllMembers();
+    multiValueDictionary.add("key1", "value1");
+    multiValueDictionary.add("key1", "value2");
+    multiValueDictionary.add("key2", "value3");
+    List<Set<String>> allMembers = multiValueDictionary.getAllMembers();
     assertEquals(2, allMembers.size());
     assertTrue(allMembers.contains(new HashSet<>(Set.of("value1", "value2"))));
     assertTrue(allMembers.contains(new HashSet<>(Set.of("value3"))));
@@ -214,9 +214,9 @@ public class MultiStringsDictionaryTest {
 
   @Test
   public void testGetAllMembersWhenSomeKeysHaveNoMembers() throws MemberAlreadyExistsException {
-    multiStringsDictionary.add("key1", "value1");
-    multiStringsDictionary.add("key2", "value2");
-    List<Set<String>> allMembers = multiStringsDictionary.getAllMembers();
+    multiValueDictionary.add("key1", "value1");
+    multiValueDictionary.add("key2", "value2");
+    List<Set<String>> allMembers = multiValueDictionary.getAllMembers();
     assertEquals(2, allMembers.size());
     assertTrue(allMembers.contains(new HashSet<>(Set.of("value1"))));
     assertTrue(allMembers.contains(new HashSet<>(Set.of("value2"))));
@@ -224,16 +224,16 @@ public class MultiStringsDictionaryTest {
 
   @Test
   public void testGetItemsWhenNoItemsExist() {
-    List<String> items = multiStringsDictionary.getItems();
+    List<String> items = multiValueDictionary.getItems();
     assertTrue(items.isEmpty());
   }
 
   @Test
   public void testGetItemsWhenItemsExist() throws MemberAlreadyExistsException {
-    multiStringsDictionary.add("key1", "value1");
-    multiStringsDictionary.add("key1", "value2");
-    multiStringsDictionary.add("key2", "value3");
-    List<String> items = multiStringsDictionary.getItems();
+    multiValueDictionary.add("key1", "value1");
+    multiValueDictionary.add("key1", "value2");
+    multiValueDictionary.add("key2", "value3");
+    List<String> items = multiValueDictionary.getItems();
     assertEquals(3, items.size());
     assertTrue(items.contains("key1: value1"));
     assertTrue(items.contains("key1: value2"));
@@ -243,27 +243,27 @@ public class MultiStringsDictionaryTest {
   @Test
   public void testGetItemsWithEmptyKeys()
       throws MemberAlreadyExistsException, KeyNotFoundException {
-    multiStringsDictionary.add("key1", "value1");
-    multiStringsDictionary.add("key2", "value2");
-    multiStringsDictionary.removeAllMemberOfKey("key1");
-    List<String> items = multiStringsDictionary.getItems();
+    multiValueDictionary.add("key1", "value1");
+    multiValueDictionary.add("key2", "value2");
+    multiValueDictionary.removeAllMemberOfKey("key1");
+    List<String> items = multiValueDictionary.getItems();
     assertEquals(1, items.size());
     assertTrue(items.contains("key2: value2"));
   }
 
   @Test
   public void testClearMap() throws MemberAlreadyExistsException {
-    multiStringsDictionary.add("key1", "value1");
-    multiStringsDictionary.add("key2", "value2");
-    multiStringsDictionary.clearMap();
-    assertTrue(multiStringsDictionary.getMap().isEmpty());
+    multiValueDictionary.add("key1", "value1");
+    multiValueDictionary.add("key2", "value2");
+    multiValueDictionary.clearMap();
+    assertTrue(multiValueDictionary.getMap().isEmpty());
   }
 
   @Test
   void testEquals() throws MemberAlreadyExistsException {
-    MultiStringsDictionary dict1 = new MultiStringsDictionary();
-    MultiStringsDictionary dict2 = new MultiStringsDictionary();
-    MultiStringsDictionary dict3 = new MultiStringsDictionary();
+    MultiValueDictionary dict1 = new MultiValueDictionary();
+    MultiValueDictionary dict2 = new MultiValueDictionary();
+    MultiValueDictionary dict3 = new MultiValueDictionary();
     dict1.add("key1", "value1");
     dict1.add("key2", "value2");
     dict2.add("key1", "value1");
@@ -280,9 +280,9 @@ public class MultiStringsDictionaryTest {
 
   @Test
   void testHashCode() throws MemberAlreadyExistsException {
-    MultiStringsDictionary dict1 = new MultiStringsDictionary();
-    MultiStringsDictionary dict2 = new MultiStringsDictionary();
-    MultiStringsDictionary dict3 = new MultiStringsDictionary();
+    MultiValueDictionary dict1 = new MultiValueDictionary();
+    MultiValueDictionary dict2 = new MultiValueDictionary();
+    MultiValueDictionary dict3 = new MultiValueDictionary();
     dict1.add("key1", "value1");
     dict1.add("key2", "value2");
     dict2.add("key1", "value1");
