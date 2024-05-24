@@ -14,8 +14,8 @@ public class App {
   public static void main(String[] args) {
 
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Welcome to the APP！");
-    MultiStringsDictionary dict = new MultiStringsDictionary();
+    System.out.println("Welcome to the APP!");
+    MultiValueDictionary dict = new MultiValueDictionary();
 
     while (true) {
       String input = scanner.nextLine().trim();
@@ -24,13 +24,14 @@ public class App {
         scanner.close();
         return;
       }
-
-      String[] arguments = input.split("\\s+");
+      // More flexible : String[] arguments = input.split("\\s+");
+      String[] arguments = input.split(" ");
       if (arguments.length == 0) {
         continue;
       }
 
-      String command = arguments[0].toUpperCase();
+       // More flexible : String command = arguments[0].toUpperCase();
+       String command = arguments[0];
       switch (command) {
         case "ADD":
           handleAddCommand(dict, arguments);
@@ -71,7 +72,7 @@ public class App {
   }
 
   @VisibleForTesting
-  protected static void handleKeysCommand(MultiStringsDictionary dict, String[] arguments) {
+  protected static void handleKeysCommand(MultiValueDictionary dict, String[] arguments) {
     if (arguments.length == 1) {
       Set<String> keys = dict.getKeys();
       if (keys.isEmpty()) {
@@ -88,7 +89,7 @@ public class App {
   }
 
   @VisibleForTesting
-  protected static void handleMembersExistCommand(MultiStringsDictionary dict, String[] arguments) {
+  protected static void handleMembersExistCommand(MultiValueDictionary dict, String[] arguments) {
     if (arguments.length == 2) {
       String key = arguments[1];
       try {
@@ -110,7 +111,7 @@ public class App {
   }
 
   @VisibleForTesting
-  protected static void handleAddCommand(MultiStringsDictionary dict, String[] arguments) {
+  protected static void handleAddCommand(MultiValueDictionary dict, String[] arguments) {
     if (arguments.length == 3) {
       String key = arguments[1];
       String value = arguments[2];
@@ -126,7 +127,7 @@ public class App {
   }
 
   @VisibleForTesting
-  protected static void handleRemoveCommand(MultiStringsDictionary dict, String[] arguments) {
+  protected static void handleRemoveCommand(MultiValueDictionary dict, String[] arguments) {
     if (arguments.length == 3) {
       String key = arguments[1];
       String value = arguments[2];
@@ -142,7 +143,7 @@ public class App {
   }
 
   @VisibleForTesting
-  protected static void handleRemoveAllCommand(MultiStringsDictionary dict, String[] arguments) {
+  protected static void handleRemoveAllCommand(MultiValueDictionary dict, String[] arguments) {
     if (arguments.length == 2) {
       String key = arguments[1];
       try {
@@ -157,7 +158,7 @@ public class App {
   }
 
   @VisibleForTesting
-  protected static void handleClearCommand(MultiStringsDictionary dict, String[] arguments) {
+  protected static void handleClearCommand(MultiValueDictionary dict, String[] arguments) {
     if (arguments.length == 1) {
       dict.clearMap();
       System.out.println("Cleared");
@@ -168,7 +169,7 @@ public class App {
   }
 
   @VisibleForTesting
-  protected static void handleKeyExistsCommand(MultiStringsDictionary dict, String[] arguments) {
+  protected static void handleKeyExistsCommand(MultiValueDictionary dict, String[] arguments) {
     if (arguments.length == 2) {
       String key = arguments[1];
       System.out.println(dict.isKeyExists(key));
@@ -178,7 +179,7 @@ public class App {
   }
 
   @VisibleForTesting
-  protected static void handleMemberExistsCommand(MultiStringsDictionary dict, String[] arguments) {
+  protected static void handleMemberExistsCommand(MultiValueDictionary dict, String[] arguments) {
     if (arguments.length == 3) {
       String key = arguments[1];
       String value = arguments[2];
@@ -194,7 +195,7 @@ public class App {
   }
 
   @VisibleForTesting
-  protected static void handleAllMembersCommand(MultiStringsDictionary dict, String[] arguments) {
+  protected static void handleAllMembersCommand(MultiValueDictionary dict, String[] arguments) {
     if (arguments.length == 1) {
       if (dict.getAllMembers().isEmpty()) {
         System.out.println(EMPTY_SET_MESSAGE);
@@ -211,7 +212,7 @@ public class App {
   }
 
   @VisibleForTesting
-  protected static void handleItemsCommand(MultiStringsDictionary dict, String[] arguments) {
+  protected static void handleItemsCommand(MultiValueDictionary dict, String[] arguments) {
     if (arguments.length == 1) {
       if (dict.getMap().isEmpty()) {
         System.out.println(EMPTY_SET_MESSAGE);

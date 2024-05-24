@@ -8,14 +8,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public class MultiStringsDictionary {
+public class MultiValueDictionary {
 
   protected static final String NOT_EXIST_ERROR_MESSAGE_TEMPLATE = "Error, %s does not exist.";
   protected static final String MEMBER_EXISTS_FOR_KEY_ERROR_MESSAGE =
       "Error, member already exists for key.";
   private final Map<String, Set<String>> map;
 
-  public MultiStringsDictionary() {
+  public MultiValueDictionary() {
     map = new HashMap<>();
   }
 
@@ -27,7 +27,7 @@ public class MultiStringsDictionary {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MultiStringsDictionary that = (MultiStringsDictionary) o;
+    MultiValueDictionary that = (MultiValueDictionary) o;
     return Objects.equals(map, that.map);
   }
 
