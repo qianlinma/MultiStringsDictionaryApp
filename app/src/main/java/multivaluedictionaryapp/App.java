@@ -19,7 +19,7 @@ public class App {
 
     while (true) {
       String input = scanner.nextLine().trim();
-      if (input.equalsIgnoreCase("EXIT")) {
+      if (input.equals("EXIT")) { // More flexible : equalsIgnoreCase
         System.out.println("Exiting the application.");
         scanner.close();
         return;
